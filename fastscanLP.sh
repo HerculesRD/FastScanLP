@@ -27,6 +27,7 @@ usage()
 {
         echo -e "${YELLOW}Script usage: ${NC}"
         echo -e "${YELLOW}              ./fastscanLP.sh < -H <IP> | -D <DNS> > [-l]${NC}"
+        echo -e "${YELLOW}              -D still not implemented${NC}"
         exit 1
 }
 
@@ -83,14 +84,15 @@ parseIP()
         done
 }
 
-parseDNS()
-{
+#parseDNS()
+#{
     #saber si esta bien escrita la direccion
-}
+#}
 
 resDNS()
 {
-    getent ahosts $1 | awk '{ print $1 }'
+    string = $(getent ahosts $1 | awk '{ print $1 }' | sort -u | tr '\r\n' ' ')
+    return $string
 }
 
 while getopts ":H:D:l" opt; do
@@ -101,7 +103,7 @@ while getopts ":H:D:l" opt; do
                         IPaddr=${OPTARG}
                         ;;
 
-                d)
+                D)
                         flagD=1
                         DNSaddr=${OPTARG}
                         ;;
@@ -125,7 +127,7 @@ else
         parseIP $IPaddr
     else # It should be flagD=0
         parseDNS $DNSaddr
-        resDNS $DNSaddr
+        IPString=resDNS $DNSaddr
     fi
         if [[ "$flagl" = 1 ]]; then
                 scan 1
