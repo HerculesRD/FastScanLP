@@ -18,9 +18,11 @@
  Translated to english
  Deleted stupid functions
  Added the DNS resolver
+ IPv6 supported by DNS resolving
 
  # Notes for next updates:
 
+ * IPv6 better support
  * An option to not printing the address
  * An option to format the output
  * I think there is a bug in IP Parser, because it accepts 0.x.x.x addresses. It shouldnt
