@@ -27,7 +27,7 @@ IPcant=0
 usage()
 {
         echo -e "${YELLOW}Script usage: ${NC}"
-        echo -e "${YELLOW}              ./fastscanLP.sh < -H <IP> | -D <DNS> > [-l]${NC}"
+        echo -e "${YELLOW}              ./fastscanLP.sh < -H <IP> | -D <DNS> > [-l] [-6] ${NC}"
         exit 1
 }
 
