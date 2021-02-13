@@ -3,7 +3,7 @@
 int_handler()
 {
     echo -e "\n${L_PURPLE}[+]Saliendo...${NC}"
-    tput cnorm #devuelvo cursor
+    tput cnorm #Retorning pointer
     # Kill the parent process of the script.
     #kill $PPID
     exit 1
@@ -52,7 +52,6 @@ scan()
                                         timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - ABIERTO${NC}" &
                                         if [[ $port = 15000 ]]; then
                                                 echo -e "${YELLOW}[+]25% Terminado...${NC}"
-                                                #echo -e "$OpenPortsList"
                                         elif [[ $port = 33000 ]]; then
                                                 echo -e "${YELLOW}[+]50% Terminado...${NC}"
                                         elif [[ $port = 45000 ]]; then
@@ -81,12 +80,7 @@ parseIP()
         done
 }
 
-message()
-{
-        echo "este es un mensaje"
-}
-
-while getopts ":H:p:l" opt; do
+while getopts ":H:l" opt; do
         case "${opt}" in
 
                 H)
@@ -94,8 +88,9 @@ while getopts ":H:p:l" opt; do
                         IPaddr=${OPTARG}
                         ;;
 
-                p)
-                        flagP=1
+                d)
+                        flagD=1
+                        DNSaddr=${OPTARG}
                         ;;
 
                 l)
@@ -110,8 +105,7 @@ while getopts ":H:p:l" opt; do
 done
 
 #parsing options
-if [[ $flagH = 0 ]]; then
-        #parseIP
+if [[ $flagH = 0 && $flagD = 0 ]]; then
         usage
 else
         parseIP $IPaddr
