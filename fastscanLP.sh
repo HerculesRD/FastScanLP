@@ -2,7 +2,7 @@
 
 int_handler()
 {
-    echo -e "\n${L_PURPLE}[+]Saliendo...${NC}"
+    echo -e "\n${L_PURPLE}[+]Exiting...${NC}"
     tput cnorm #Retorning pointer
     # Kill the parent process of the script.
     #kill $PPID
@@ -22,8 +22,8 @@ flagl=0
 
 usage()
 {
-        echo -e "${YELLOW}Uso del script: ${NC}"
-        echo -e "${YELLOW}              ./fastscanLP.sh -H <IP> [-m]${NC}"
+        echo -e "${YELLOW}Script usage: ${NC}"
+        echo -e "${YELLOW}              ./fastscanLP.sh < -H <IP> | -D <DNS> > [-l]${NC}"
         exit 1
 }
 
@@ -80,7 +80,12 @@ parseIP()
         done
 }
 
-while getopts ":H:l" opt; do
+parseDNS()
+{
+    #saber si esta bien escrita la direccion
+}
+
+while getopts ":H:D:l" opt; do
         case "${opt}" in
 
                 H)
@@ -106,9 +111,13 @@ done
 
 #parsing options
 if [[ $flagH = 0 && $flagD = 0 ]]; then
-        usage
+    usage
 else
+    if [[ $flagH = 1 ]]; then
         parseIP $IPaddr
+    else # It should be flagD=0
+        parseDNS $DNSaddr
+    fi
         if [[ "$flagl" = 1 ]]; then
                 scan 1
         elif [[ "$flagl" = "0" ]]; then
