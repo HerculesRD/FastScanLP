@@ -13,6 +13,7 @@ trap 'int_handler' INT
 
 #Colors!
 YELLOW='\033[1;33m'
+BRed='\033[1;31m'
 L_PURPLE='\033[1;35m'
 L_GREEN='\033[1;32m'
 NC='\033[0m'
@@ -55,7 +56,7 @@ scan()
                                     done; wait; tput cnorm
                                     #echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
                             elif [[ $1 = 0 ]]; then
-                                    echo -en "${L_GREEN}Open ports list for ${IPSelect}: \n ${NC}"
+                                    echo -e "${L_GREEN}Open ports list for ${IPSelect}: ${NC}"
                                     tput civis; for port in $(seq 1 65535); do
                                             timeout 1 bash -c "echo > /dev/tcp/${IPSelect}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - OPEN${NC}" &
                                             if [[ $port = 15000 ]]; then
@@ -138,8 +139,10 @@ done
 if [[ $flagH = 0 && $flagD = 0 ]]; then
     usage
 else
+    echo -e "\n\n"
     if [[ $flagH = 1 ]]; then
-        if [[ $flag6 = 1 ]]; then :
+        if [[ $flag6 = 1 ]]; then
+            echo -e "${BRed}Remember that IPv6 doesnt have parser. Check the typing twice, please.\n ${NC}"
         else
             parseIP $IPaddr
         fi
