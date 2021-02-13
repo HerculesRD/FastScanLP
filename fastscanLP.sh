@@ -19,6 +19,7 @@ L_GREEN='\033[1;32m'
 NC='\033[0m'
 #Just flags
 flagH=0
+flagD=0
 flagP=0
 flagl=0
 flag6=0
