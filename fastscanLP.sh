@@ -4,21 +4,24 @@ int_handler()
 {
     echo -e "\n${L_PURPLE}[+]Exiting...${NC}"
     tput cnorm #Retorning pointer
-    # Kill the parent process of the script.
+    # Kill the parent process of the script.?
     #kill $PPID
     exit 1
 }
 
 trap 'int_handler' INT
 
-
+#Colors!
 YELLOW='\033[1;33m'
 L_PURPLE='\033[1;35m'
 L_GREEN='\033[1;32m'
 NC='\033[0m'
+#Just flags
 flagH=0
 flagP=0
 flagl=0
+IPaddr_amount=0
+
 
 usage()
 {
@@ -85,6 +88,11 @@ parseDNS()
     #saber si esta bien escrita la direccion
 }
 
+resDNS()
+{
+    getent ahosts $1 | awk '{ print $1 }'
+}
+
 while getopts ":H:D:l" opt; do
         case "${opt}" in
 
@@ -117,6 +125,7 @@ else
         parseIP $IPaddr
     else # It should be flagD=0
         parseDNS $DNSaddr
+        resDNS $DNSaddr
     fi
         if [[ "$flagl" = 1 ]]; then
                 scan 1
