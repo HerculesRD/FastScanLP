@@ -34,6 +34,7 @@ usage()
         echo -e "${YELLOW}              ./fastscanLP.sh -H 192.168.0.1 ${NC}"
         echo -e "${YELLOW}              ./fastscanLP.sh -H 192.168.0.1 -l #this output: Open: 21,22,25,...${NC}"
         echo -e "${YELLOW}              ./fastscanLP.sh -D scanme.nmap.org #Resolves every ip, even ipv6{NC}"
+        echo -e "${YELLOW}              ./fastscanLP.sh -D scanme.nmap.org -l #same but with another output{NC}"
         echo -e "${YELLOW}              ./fastscanLP.sh -H 2800:3f0:4002:802::200e -6 #for ipv6, it doesnt parse yet. ${NC}"
 
 
