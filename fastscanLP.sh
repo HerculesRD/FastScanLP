@@ -36,10 +36,10 @@ scan()
                         echo -e "${YELLOW}        / __// /_/ /(__  )/ /_ (__  )/ /__ / /_/ // / / // /___ / ____/  ${NC}"
                         echo -e "${YELLOW}       /_/   \__,_//____/ \__//____/ \___/ \__,_//_/ /_//_____//_/       ${NC}"
                         echo ""
-                        echo -e "${L_PURPLE}[+]Comenzando el escaneo de todos los puertos en $IPaddr...${NC}"
+                        echo -e "${L_PURPLE}[+]Starting the scanner for 65535 ports in $IPaddr...${NC}"
                         date
                         if [[ $1 = 1 ]]; then
-                                echo -en "${L_GREEN}Lista de puertos abiertos: ${NC}"
+                                echo -en "${L_GREEN}Open ports list: ${NC}"
                                 tput civis; for port in $(seq 1 65535); do
                                         timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -en "${port}," &
                                 done; wait; tput cnorm
@@ -49,15 +49,15 @@ scan()
                                 exit 0
                         elif [[ $1 = 0 ]]; then
                                 tput civis; for port in $(seq 1 65535); do
-                                        timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - ABIERTO${NC}" &
+                                        timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - OPEN${NC}" &
                                         if [[ $port = 15000 ]]; then
-                                                echo -e "${YELLOW}[+]25% Terminado...${NC}"
+                                                echo -e "${YELLOW}[+]25% progress...${NC}"
                                         elif [[ $port = 33000 ]]; then
-                                                echo -e "${YELLOW}[+]50% Terminado...${NC}"
+                                                echo -e "${YELLOW}[+]50% progress...${NC}"
                                         elif [[ $port = 45000 ]]; then
-                                                echo -e "${YELLOW}[+]75% Terminado... ${NC}"
+                                                echo -e "${YELLOW}[+]75% progress... ${NC}"
                                         elif [[ $port = 60000 ]]; then
-                                                echo -e "${YELLOW}[+]Ya falta muy poquito...${NC}"
+                                                echo -e "${YELLOW}[+]Sooo little...${NC}"
                                         fi
                                 done; wait; tput cnorm
                                 echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
@@ -73,8 +73,8 @@ parseIP()
                 if [[ $(echo "$1" | cut -d. -f$i) -ge 0 ]] && [[ $(echo "$1" | cut -d. -f$i) -le 255 ]]; then :
                 else
                         echo
-                        echo -e "${YELLOW}La IP ${1} es incorrecta ${NC}"
-                        echo -e "${L_PURPLE}[+]Saliendo...${NC}"
+                        echo -e "${YELLOW}IP ${1} isnt correct ${NC}"
+                        echo -e "${L_PURPLE}[+]Exiting...${NC}"
                         exit 1
                 fi
         done
