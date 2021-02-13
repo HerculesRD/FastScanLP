@@ -19,10 +19,10 @@
  UPDATES:
 
  ## 13/2/21
- Translated to english
- Deleted stupid functions
- Added the DNS resolver
- IPv6 support
+ * Translated to english
+ * Deleted stupid functions
+ * Added the DNS resolver
+ * IPv6 support
 
  # Notes for next updates:
 
