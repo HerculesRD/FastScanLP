@@ -27,7 +27,6 @@ usage()
 {
         echo -e "${YELLOW}Script usage: ${NC}"
         echo -e "${YELLOW}              ./fastscanLP.sh < -H <IP> | -D <DNS> > [-l]${NC}"
-        echo -e "${YELLOW}              -D still not implemented${NC}"
         exit 1
 }
 
