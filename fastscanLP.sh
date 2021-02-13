@@ -20,6 +20,7 @@ NC='\033[0m'
 flagH=0
 flagP=0
 flagl=0
+flag6=0
 IPcant=0
 
 
@@ -105,7 +106,7 @@ resDNS()
     fi
 }
 
-while getopts ":H:D:l" opt; do
+while getopts ":H:D:l6" opt; do
         case "${opt}" in
 
                 H)
@@ -122,6 +123,10 @@ while getopts ":H:D:l" opt; do
                         flagl=1
                         ;;
 
+                6)
+                        flag6=1
+                        ;;
+
                 *)
                         usage
                         ;;
@@ -134,7 +139,10 @@ if [[ $flagH = 0 && $flagD = 0 ]]; then
     usage
 else
     if [[ $flagH = 1 ]]; then
-        parseIP $IPaddr
+        if [[ $flag6 = 1 ]]; then :
+        else
+            parseIP $IPaddr
+        fi
         parsedList=$IPaddr
     else # It should be flagD=0
         resDNS $DNSaddr
