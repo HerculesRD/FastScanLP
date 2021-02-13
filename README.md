@@ -4,9 +4,7 @@
  Usage: ./FastScanLP.sh < -H <IP> | -D <DNS> > [-l]
 
  Without -l you have a list with an open port in each line. With -l, the list is just numeric and in one line (more "grepeable" i think)
-
- The DNS resolver will be ready soon (still not working)
-
+ 
  Thanks for using the Scanner!! Please be free to want stuff
 
  # How it works?
