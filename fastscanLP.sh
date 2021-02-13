@@ -20,7 +20,7 @@ NC='\033[0m'
 flagH=0
 flagP=0
 flagl=0
-IPaddr_amount=0
+IPcant=0
 
 
 usage()
@@ -40,41 +40,47 @@ scan()
                         echo -e "${YELLOW}        / __// /_/ /(__  )/ /_ (__  )/ /__ / /_/ // / / // /___ / ____/  ${NC}"
                         echo -e "${YELLOW}       /_/   \__,_//____/ \__//____/ \___/ \__,_//_/ /_//_____//_/       ${NC}"
                         echo ""
-                        echo -e "${L_PURPLE}[+]Starting the scanner for 65535 ports in $IPaddr...${NC}"
+                        parsedList2=$(echo -en "$parsedList" | sed 's/ /, /g')
+                        echo -e "${L_PURPLE}[+]Starting the scanner for 65535 ports in ${parsedList2}...${NC}"
+                        
                         date
-                        if [[ $1 = 1 ]]; then
-                                echo -en "${L_GREEN}Open ports list: ${NC}"
-                                tput civis; for port in $(seq 1 65535); do
-                                        timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -en "${port}," &
-                                done; wait; tput cnorm
-                                echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
-                                echo -e "${L_PURPLE}[+]FIN${NC}"
-                                date
-                                exit 0
-                        elif [[ $1 = 0 ]]; then
-                                tput civis; for port in $(seq 1 65535); do
-                                        timeout 1 bash -c "echo > /dev/tcp/${IPaddr}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - OPEN${NC}" &
-                                        if [[ $port = 15000 ]]; then
-                                                echo -e "${YELLOW}[+]25% progress...${NC}"
-                                        elif [[ $port = 33000 ]]; then
-                                                echo -e "${YELLOW}[+]50% progress...${NC}"
-                                        elif [[ $port = 45000 ]]; then
-                                                echo -e "${YELLOW}[+]75% progress... ${NC}"
-                                        elif [[ $port = 60000 ]]; then
-                                                echo -e "${YELLOW}[+]Sooo little...${NC}"
-                                        fi
-                                done; wait; tput cnorm
-                                echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
-                                echo -e "${L_PURPLE}[+]FIN${NC}"
-                                date
-                                exit 0
-                        fi
+                        
+                        #mientras tenga ips para scanear que haga este marote
+
+                        for IPSelect in $parsedList ; do
+                            if [[ $1 = 1 ]]; then
+                                    echo -en "${L_GREEN}Open ports list for ${IPSelect}: ${NC}"
+                                    tput civis; for port in $(seq 1 65535); do
+                                            timeout 1 bash -c "echo > /dev/tcp/${IPSelect}/$port" 2>/dev/null && echo -en "${port}," &
+                                    done; wait; tput cnorm
+                                    #echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
+                            elif [[ $1 = 0 ]]; then
+                                    echo -en "${L_GREEN}Open ports list for ${IPSelect}: \n ${NC}"
+                                    tput civis; for port in $(seq 1 65535); do
+                                            timeout 1 bash -c "echo > /dev/tcp/${IPSelect}/$port" 2>/dev/null && echo -e "${L_GREEN}PUERTO $port - OPEN${NC}" &
+                                            if [[ $port = 15000 ]]; then
+                                                    echo -e "${YELLOW}[+]25% progress...${NC}"
+                                            elif [[ $port = 33000 ]]; then
+                                                    echo -e "${YELLOW}[+]50% progress...${NC}"
+                                            elif [[ $port = 45000 ]]; then
+                                                    echo -e "${YELLOW}[+]75% progress... ${NC}"
+                                            elif [[ $port = 60000 ]]; then
+                                                    echo -e "${YELLOW}[+]Sooo little...${NC}"
+                                            fi
+                                    done; wait; tput cnorm
+                                    #echo -e "${L_GREEN} ${OpenPortsList} ${NC}"
+                            fi
+                        done
+                        echo -e "${L_PURPLE}[+]THE END${NC}"
+                        date
+                        exit 0
 }
 
 parseIP()
 {
         for i in $(seq 1 4); do
-                if [[ $(echo "$1" | cut -d. -f$i) -ge 0 ]] && [[ $(echo "$1" | cut -d. -f$i) -le 255 ]]; then :
+                if [[ $(echo "$1" | cut -d. -f$i) -ge 0 ]] && [[ $(echo "$1" | cut -d. -f$i) -le 255 ]]; then 
+                        IPcant=1
                 else
                         echo
                         echo -e "${YELLOW}IP ${1} isnt correct ${NC}"
@@ -84,15 +90,20 @@ parseIP()
         done
 }
 
-#parseDNS()
-#{
-    #saber si esta bien escrita la direccion
-#}
-
 resDNS()
 {
-    string = $(getent ahosts $1 | awk '{ print $1 }' | sort -u | tr '\r\n' ' ')
-    return $string
+    IPstring=$(getent ahosts $1 | awk '{ print $1 }' | sort -u | tr '\r\n' ' ')
+    
+    #IP Amount
+    IPcant=$(echo "$IPstring" | wc -w)
+    
+    if [[ $IPcant -eq 0 ]]; then
+        echo -e "${YELLOW}DNS $DNSaddr couldn't be resolved ${NC}" #such a simple parser, right?
+        echo -e "${L_PURPLE}[+]Exiting...${NC}"
+        exit 1 
+    else
+        :
+    fi
 }
 
 while getopts ":H:D:l" opt; do
@@ -125,9 +136,10 @@ if [[ $flagH = 0 && $flagD = 0 ]]; then
 else
     if [[ $flagH = 1 ]]; then
         parseIP $IPaddr
+        parsedList=$IPaddr
     else # It should be flagD=0
-        parseDNS $DNSaddr
-        IPString=resDNS $DNSaddr
+        resDNS $DNSaddr
+        parsedList=$IPstring
     fi
         if [[ "$flagl" = 1 ]]; then
                 scan 1
